@@ -76,21 +76,7 @@ def task2_dds_to_cdm():
     @task
     def get_user_age_groups():
         query_result = """        
-            SELECT
-                CASE
-                WHEN DATEDIFF('year', p.date_of_birthday, CURRENT_DATE) BETWEEN 0 AND 17 THEN '0-17'
-                WHEN DATEDIFF('year', p.date_of_birthday, CURRENT_DATE) BETWEEN 18 AND 24 THEN '18-24'
-                WHEN DATEDIFF('year', p.date_of_birthday, CURRENT_DATE) BETWEEN 25 AND 34 THEN '25-34'
-                WHEN DATEDIFF('year', p.date_of_birthday, CURRENT_DATE) BETWEEN 35 AND 44 THEN '35-44'
-                WHEN DATEDIFF('year', p.date_of_birthday, CURRENT_DATE) BETWEEN 45 AND 54 THEN '45-54'
-                WHEN DATEDIFF('year', p.date_of_birthday, CURRENT_DATE) BETWEEN 55 AND 64 THEN '55-64'
-                ELSE '65+'
-                END AS age_group,
-            COUNT(DISTINCT p.id) AS num_people
-        FROM peoples_who_wrote_in_top pw
-                 JOIN public.peoples p ON p.id = pw.msg_from
-        GROUP BY date_of_birthday
-        ORDER BY age_group;
+            select * from user_age_distribution;
         """
         with vertica_python.connect(**conn_info) as connection:
             create_view_top_5_group(connection)
